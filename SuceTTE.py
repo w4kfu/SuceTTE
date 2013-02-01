@@ -6,6 +6,7 @@ TEMPLATE="page.html"
 OUTDIR="out"
 CSS="style.css"
 SITETITLE="Bordel"
+FOOTER=""
 IMG=['jpg', 'jpeg', 'bmp', 'gif', 'png']
 
 custom_tags = []
@@ -43,6 +44,8 @@ class File(object):
 
 	def MakeMenu(self, folders, files):
 		for entry in folders:
+			if len(entry.files) == 0:
+				continue
 			self.menu += '<div class="menu">' + MakeLink("/" + entry.outpath, entry.name) + '</div>\n'
 			SubMenu = ""
 			if files != None:
@@ -160,6 +163,9 @@ def tag(function):
 @tag
 def SiteTitle():
 	return SITETITLE
+@tag
+def footer():
+	return FOOTER
 
 def main():
     	if len(sys.argv) == 1:
