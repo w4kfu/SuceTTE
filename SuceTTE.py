@@ -92,7 +92,9 @@ def MakeRootIndex(rootfolder, template, directory, outdir):
 		if os.path.isdir(os.path.join(rootfolder, entry)):
 			rootmenu[entry] = "index.html"
 			MakeRootIndex(os.path.join(rootfolder, entry), template, os.listdir(os.path.join(rootfolder, entry)), os.path.join(outdir, entry))
-	ProcessFile(rootfolder, template, outdir, "index.tte", rootmenu)
+	for entry in directory:
+		if entry.endswith(".tte"):
+			ProcessFile(rootfolder, template, outdir, entry, rootmenu)
 
 def ProcessFile(pathfile, template, outpath, filename, menu):
 	outfile = MakeOutputName(filename)
