@@ -1,39 +1,42 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
-<head><title>{{SiteTitle}}</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<title>{{SiteTitle}}</title>
 
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="style.css" rel="stylesheet" type="text/css" />
-<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-<link rel="icon" href="/favicon.ico" type="image/x-icon" />
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    
+<link rel='stylesheet' type='text/css' href='/style.css'/>
 </head>
-
-
-
 <body>
 
-<div id="contener">
-<div id="header">
-<a href="lol">{{SiteTitle}}</a> 
-</div>	<!-- div id header -->
-
 <div id="menu">
-
-<div class="menutitle1">Links</div>
 {{menu}}
 </div><!-- div id menu -->
 
-<div id="content">
+<div class="main bg box">
 
-<h1>{{title}}</h1>
+<div id="header">
+{{title}}
+</div>	<!-- div id header -->
 
-{{body}}
+    <div class="box">
+        <div id="content">
 
-</div> <!-- div id content -->
-<div id="footer">
-Powered by <a href="http://git.etoilebsd.net/cblog">CBlog 0.1.5</a>
-</div>
-</div> <!-- div id contener -->
+		{{body}}
+		
+        </div> <!-- div id content -->
+
+        <hr class="noscreen" />
+    
+    </div> <!--  div id box -->
+
+    <hr class="noscreen" />
+    <div id="footer" class="box">{{footer}}</span></p>
+
+    </div> <!-- div id footer -->
+
+
+
 </body>
 </html>
