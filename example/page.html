@@ -1,19 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
-<head><title>{{title}}</title>
+<head><title>{{SiteTitle}}</title>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="style.css" rel="stylesheet" type="text/css" />
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-
-<!-- <?cs if:Query.tag ?>
-<link href="<?cs var:root ?>/tag/<?cs var:Query.tag ?>?feed=atom" rel="alternate" title="Atom 1.0 pour le tag <?cs var:Query.tag ?>" type="application/atom+xml" />
-<link href="<?cs var:root ?>/tag/<?cs var:Query.tag ?>?feed=rss" rel="alternate" title="RSS 2.0 pour le tag <?cs var:Query.tag ?>" type="application/rss+xml" />
-<?cs else ?>
-<link href="/index.atom" rel="alternate" title="Atom 1.0" type="application/atom+xml" />
-<link href="/index.rss" rel="alternate" title="RSS 2.0" type="application/rss+xml" />
-<?cs /if ?> !-->
 
 </head>
 
@@ -23,25 +15,25 @@
 
 <div id="contener">
 <div id="header">
-<a href="lol">{{title}}</a> 
+<a href="lol">{{SiteTitle}}</a> 
 </div>	<!-- div id header -->
 
 <div id="menu">
 
-<div class="menutitle">Links</div>
+<div class="menutitle1">Links</div>
 {{menu}}
 </div><!-- div id menu -->
+
 <div id="content">
 
 <h1>{{title}}</h1>
 
 {{body}}
 
-<p>
-Modified: {{today}} at {{now}}
-</p>
-
 </div> <!-- div id content -->
+<div id="footer">
+Powered by <a href="http://git.etoilebsd.net/cblog">CBlog 0.1.5</a>
+</div>
 </div> <!-- div id contener -->
 </body>
 </html>
