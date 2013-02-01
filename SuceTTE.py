@@ -6,6 +6,7 @@ TEMPLATE="page.html"
 OUTDIR="out"
 CSS="style.css"
 SITETITLE="Bordel"
+IMG=['jpg', 'jpeg', 'bmp', 'gif', 'png']
 
 custom_tags = []
 
@@ -20,17 +21,17 @@ class File(object):
 		self.menu = ""
 	
 	def Read(self):
-		with open(os.path.join(self.inpath, self.name), "r") as f:
+		with open(os.path.join(self.inpath, self.name), "rb") as f:
 			return f.read()
 	
 	def ReadLines(self):
-		with open(os.path.join(self.inpath, self.name), "r") as f:
+		with open(os.path.join(self.inpath, self.name), "rb") as f:
 			return list(f)
 
 	def Write(self, outpath, name, content):
 		if not os.path.exists(outpath):
 			os.mkdir(outpath)
-		with open(os.path.join(outpath, name), "w") as f:
+		with open(os.path.join(outpath, name), "wb") as f:
 			f.write(content)
 
 	def MakeOutputName(self, filename):
@@ -101,6 +102,10 @@ class Folder:
 	    	for entry in os.listdir(self.inpath):
 			if os.path.isdir(posixpath.join(self.inpath, entry)):
 				continue
+			if any(entry.endswith(x) for x in IMG):
+				f = File(self.inpath, self.outpath, entry)
+				f.Write(posixpath.join(OUTDIR, self.outpath), f.name, f.Read())
+				continue
 			elif not entry.endswith('.tte'):
                     		continue
 			self.files.append(File(self.inpath,
@@ -129,6 +134,7 @@ class RootFolder(Folder):
 				    			posixpath.join(self.outpath, entry),
 							entry))
 		self.template = File(self.inpath, None, TEMPLATE).Read()
+		self.css = File(self.inpath, None, CSS)
 
 	def PrintRoot(self):
 		self.PrintFolder()
@@ -143,6 +149,7 @@ class RootFolder(Folder):
 			for fi in f.files:
 				fi.MakeMenu(self.folders, f.files)
 				fi.ProcessFile(self.template)
+		self.css.Write(OUTDIR, CSS, self.css.Read())
 
 
 def tag(function):
@@ -161,7 +168,7 @@ def main():
 		print "Processing ", sys.argv[1], "..."
 		rootfolder = RootFolder(sys.argv[1], "", sys.argv[1])
 		rootfolder.Generate()
-		rootfolder.PrintRoot()
+		#rootfolder.PrintRoot()
 
 if __name__ == '__main__':
     	main()
