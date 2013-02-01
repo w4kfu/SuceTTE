@@ -20,17 +20,17 @@ class File(object):
 		self.menu = ""
 	
 	def Read(self):
-		with open(os.join.path(self.inpath, self.name), "r") as f:
+		with open(os.path.join(self.inpath, self.name), "r") as f:
 			return f.read()
 	
 	def ReadLines(self):
-		with open(os.join.path(self.inpath, self.name), "r") as f:
+		with open(os.path.join(self.inpath, self.name), "r") as f:
 			return list(f)
 
-	def Write(self, content):
-		if not os.path.exists(self.outpath):
-			os.mkdir(self.outpath)
-		with open(os.join.path(self.outpath, self.name), "w") as f:
+	def Write(self, outpath, name, content):
+		if not os.path.exists(outpath):
+			os.mkdir(outpath)
+		with open(os.path.join(outpath, name), "w") as f:
 			f.write(content)
 
 	def MakeOutputName(self, filename):
@@ -55,10 +55,41 @@ class File(object):
 
 	def ProcessFile(self, template):
 		outfile = self.MakeOutputName(self.name)
-		sections = ReadSections(posixpath.join(self.inpath, self.name))
+		sections = self.ReadSections(posixpath.join(self.inpath, self.name))
 		sections["menu"] = self.menu
-		output = ReplaceSections(template, sections)
-		WriteFile(posixpath.join(OUTDIR, self.outpath), outfile, output)
+		output = self.ReplaceSections(template, sections)
+		self.Write(posixpath.join(OUTDIR, self.outpath), self.MakeOutputName(self.name), output)
+
+	def ParseSections(self, lines):
+		sections = {}
+		section = []
+
+		for tag_name, tag_function in custom_tags:
+			sections[tag_name] = tag_function()
+
+		name = "empty"
+		for line in lines:
+			if line.startswith("$$"):
+				sections[name] = "".join(section).strip()
+				section = []
+				name = line[2:].strip()
+			else:
+				section.append(line)
+
+		sections[name] = "".join(section)
+		sections[name].strip()
+		return sections
+
+	def ReadSections(self, filename):
+		lines = self.ReadLines()
+		sections = self.ParseSections(lines)
+		return sections
+
+	def ReplaceSections(self, template, sections):
+		for section in sections:
+			tag = "{{" + section + "}}"
+			template = template.replace(tag, "".join(sections[section]))
+		return template
 
 class Folder:
 	def __init__(self, inpath, outpath, name):
@@ -97,6 +128,7 @@ class RootFolder(Folder):
 				self.folders.append(Folder(posixpath.join(self.inpath, entry),
 				    			posixpath.join(self.outpath, entry),
 							entry))
+		self.template = File(self.inpath, None, TEMPLATE).Read()
 
 	def PrintRoot(self):
 		self.PrintFolder()
@@ -104,14 +136,13 @@ class RootFolder(Folder):
 			f.PrintFolder()
 
 	def Generate(self):
-		template = ReadFile(posixpath.join(self.inpath, TEMPLATE))		
 		for f in self.files:
 			f.MakeMenu(self.folders, None)
-			f.ProcessFile(template)
+			f.ProcessFile(self.template)
 		for f in self.folders:
 			for fi in f.files:
 				fi.MakeMenu(self.folders, f.files)
-				fi.ProcessFile(template)
+				fi.ProcessFile(self.template)
 
 
 def tag(function):
@@ -119,54 +150,9 @@ def tag(function):
     return function
 
 
-def ReadFile(filename):
-    with open(filename, "r") as f:
-        return f.read()
 @tag
 def SiteTitle():
 	return SITETITLE
-
-def WriteFile(path, filename, content):
-    if not os.path.exists(path):
-        os.mkdir(path)
-    with open(posixpath.join(path, filename), "w") as f:
-        f.write(content)
-
-def ReadLines(filename):
-    with open(filename,"r") as f:
-        return list(f)
-
-def ParseSections(lines):
-	sections = {}
-	section = []
-
-	for tag_name, tag_function in custom_tags:
-		sections[tag_name] = tag_function()
-
-	name = "__nosection__"
-	for line in lines:
-		if line.startswith("$$"):
-			sections[name] = "".join(section).strip()
-			section = []
-			name = line[2:].strip()
-		else:
-			section.append(line)
-
-	sections[name] = "".join(section)
-	sections[name].strip()
-	return sections
-
-def ReadSections(filename):
-	lines = ReadLines(filename)
-	sections = ParseSections(lines)
-	return sections
-
-def ReplaceSections(template, sections):
-	for section in sections:
-		tag = "{{" + section + "}}"
-		template = template.replace(tag, "".join(sections[section]))
-	return template
-
 
 def main():
     	if len(sys.argv) == 1:
