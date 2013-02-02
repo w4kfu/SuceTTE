@@ -1,11 +1,12 @@
 import os
 import sys
 import posixpath
+import markdown
 
 TEMPLATE="page.html"
-OUTDIR="out"
+OUTDIR="rstuff"
 CSS="style.css"
-SITETITLE="Bordel"
+SITETITLE="Random Stuff"
 FOOTER=""
 IMG=['jpg', 'jpeg', 'bmp', 'gif', 'png']
 
@@ -61,6 +62,9 @@ class File(object):
 		outfile = self.MakeOutputName(self.name)
 		sections = self.ReadSections(posixpath.join(self.inpath, self.name))
 		sections["menu"] = self.menu
+		md = markdown.Markdown()
+        	sections["body"] = md.convert(sections["body"])		
+
 		output = self.ReplaceSections(template, sections)
 		self.Write(posixpath.join(OUTDIR, self.outpath), self.MakeOutputName(self.name), output)
 
