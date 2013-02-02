@@ -13,7 +13,7 @@ IMG=['jpg', 'jpeg', 'bmp', 'gif', 'png']
 custom_tags = []
 
 def MakeLink(dest, content):
-	return '<a href="%s"/>%s</a>' % (dest, content)
+	return '<a href="%s">%s</a>' % (dest, content)
 
 class File(object):
 	def __init__(self, inpath, outpath, name):
