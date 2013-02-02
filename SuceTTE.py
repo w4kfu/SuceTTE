@@ -145,6 +145,8 @@ class RootFolder(Folder):
 			f.PrintFolder()
 
 	def Generate(self):
+		if not os.path.exists(OUTDIR):
+			os.mkdir(OUTDIR)
 		for f in self.files:
 			f.MakeMenu(self.folders, None)
 			f.ProcessFile(self.template)
